@@ -21,8 +21,6 @@
 
 <script>
 import { ref } from 'vue';
-import stat from '../../assets/pics/homepage/stat.jpg';
-import qr from '../../assets/pics/homepage/qr.jpg';
 export default {
   name: 'Landingitem',
   props: ['cim', 'alcim', 'photo', 'orientation'],
@@ -46,9 +44,9 @@ export default {
     photos() {
       switch (this.photo) {
         case 'stat':
-          return stat;
+          return 'https://via.placeholder.com/350';
         case 'qr':
-          return qr;
+          return 'https://via.placeholder.com/350';
         default:
           return this.photo;
       }

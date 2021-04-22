@@ -1,11 +1,7 @@
-import { createApp, defineAsyncComponent } from 'vue';
+import { createApp } from 'vue';
 import router from '@/router';
 import store from '@/store';
 import App from '@/App.vue';
-import { rtdbPlugin as VueFire } from 'vuefire';
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import firebaseConfig from './config/firebase.config';
 import 'bootstrap';
 import {
   FontAwesomeIcon,
@@ -18,31 +14,19 @@ import BaseInput from './components/UI/BaseInput.vue';
 import BaseBadge from './components/UI/BaseBadge.vue';
 import BaseDialog from './components/UI/BaseDialog.vue';
 import BaseTable from './components/UI/BaseTable.vue';
-const BaseLoader = defineAsyncComponent(() => import('./components/UI/BaseLoader.vue'));
 
-firebase.initializeApp(firebaseConfig);
+const app = createApp(App);
 
-firebase.auth().onAuthStateChanged(user => {
-  user = firebase.auth().currentUser;
-  if (user) store.dispatch('changeAuth', { user: user });
-  else store.dispatch('changeAuth');
+app.use(store);
+app.use(router);
 
-  const app = createApp(App);
+app.component('BaseButton', BaseButton);
+app.component('BaseInput', BaseInput);
+app.component('BaseBadge', BaseBadge);
+app.component('BaseDialog', BaseDialog);
+app.component('BaseTable', BaseTable);
+app.component('FaIcon', FontAwesomeIcon);
+app.component('FaLayers', FontAwesomeLayers);
+app.component('FaLayersText', FontAwesomeLayersText);
 
-  app.use(store);
-  app.use(router);
-  app.use(VueFire);
-
-  app.component('BaseButton', BaseButton);
-  app.component('BaseInput', BaseInput);
-  app.component('BaseLoader', BaseLoader);
-  app.component('BaseBadge', BaseBadge);
-  app.component('BaseDialog', BaseDialog);
-  app.component('BaseTable', BaseTable);
-
-  app.component('FaIcon', FontAwesomeIcon);
-  app.component('FaLayers', FontAwesomeLayers);
-  app.component('FaLayersText', FontAwesomeLayersText);
-
-  app.mount('#app');
-});
+app.mount('#app');
