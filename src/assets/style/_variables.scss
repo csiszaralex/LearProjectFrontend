@@ -1,0 +1,36 @@
+//*Engedély
+$grid-bs: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+);
+$enable-negative-margins: true;
+
+//*Háttér
+$bg: #f3f8fe;
+$body-bg: $bg;
+$pagination-bg: $bg;
+$card-bg: $bg;
+
+//* Szöveg
+$white: #ededed;
+$black: #414141;
+$gray-900: $black;
+$min-contrast-ratio: 3.1;
+
+//*Navbár
+$navbar-dark-color: $white;
+$navbar-light-color: $black;
+
+//*Változók
+$light: $white;
+$dark: $black;
+$primary: #afcbff;
+$secondary: #6B6F6E;
+$info: #d3ade3;
+$success: #48c774;
+$warning: #f6aa50;
+$danger: #ee6055;
