@@ -1,28 +1,45 @@
 <template>
-  <nav class="navbar navbar-light bg-primary">
-    <div class="container-fluid">
-      <router-link to="/" class="navbar-brand" href="#">
-        <img
-          :src="require('@/assets/pics/logo/logo.png')"
-          alt=""
-          width="30"
-          height="30"
-          class="d-inline-block align-top"
-        />
-        Quizy
-      </router-link>
-      <div v-if="isLoggedIn" class="d-flex mr-n align-items-center">
-        <!-- TODO Itt profil szerkesztés -->
-        <span class="mx-2">{{ name }}</span>
-        <base-button type="danger" outline @click="logout">
-          <fa-icon icon="sign-out-alt" class="fa-1x mr-1" />
-          Kijelentkezés
-        </base-button>
-      </div>
-      <div v-else class="d-flex mr-n">
-        <base-button to="/auth?mode=reg" type="info">Regisztráció</base-button>
-        <base-button to="/auth?mode=login" type="success">Bejelentkezés</base-button>
-      </div>
+  <nav class="navbar navbar-expand-md navbar-light bg-primary">
+    <router-link to="/" class="navbar-brand ml-2">
+      <img
+        :src="require('@/assets/pics/logo/logo.png')"
+        alt=""
+        width="30"
+        height="30"
+        class="d-inline-block align-top"
+      />
+      Quizy
+    </router-link>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navb">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navb" class="collapse navbar-collapse">
+      <ul class="navbar-nav ml-auto">
+        <li v-if="isLoggedIn" class="nav-item btn dropdown">
+          <a id="fiok" class="btn dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+            {{ name }}
+          </a>
+          <div class="dropdown-menu dropdown-menu-right pb-0">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Something else here</a>
+            <base-button type="danger" class="w-100" outline @click="logout">
+              <fa-icon icon="sign-out-alt" class="fa-1x mr-1" />
+              Kijelentkezés
+            </base-button>
+          </div>
+        </li>
+        <template v-else>
+          <li class="nav-item">
+            <base-button to="/auth?mode=reg" type="info">Regisztráció</base-button>
+          </li>
+          <li class="nav-item">
+            <base-button to="/auth?mode=login" type="success">Bejelentkezés</base-button>
+          </li>
+        </template>
+      </ul>
     </div>
   </nav>
 </template>
@@ -58,7 +75,7 @@ export default {
   padding-top: 0;
   padding-bottom: 0;
   margin-right: 0;
-  overflow: hidden visible;
+  // overflow: hidden visible;
   // overflow-x: hidden;
   // overflow-y: visible;
   .dropdown-menu {

@@ -16,6 +16,9 @@ export default {
     getName(state) {
       return state.user.name;
     },
+    getRole(state) {
+      return state.user?.role ? state.user.role : 0;
+    },
   },
   mutations: {
     changeAuth(state, payload) {
