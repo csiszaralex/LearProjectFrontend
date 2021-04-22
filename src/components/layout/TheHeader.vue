@@ -11,28 +11,9 @@
         />
         Quizy
       </router-link>
-      <div
-        v-if="isTeacher"
-        id="teacherNav"
-        class="d-flex flex-grow-1 ml-2 justify-content-start align-items-center h-100"
-      />
-      <div
-        v-if="isFill"
-        id="fillNav"
-        class="d-flex flex-grow-1 ml-2 justify-content-start align-items-center h-100"
-      />
-      <div
-        v-if="isQuiz"
-        id="quizNav"
-        class="d-flex flex-grow-1 mr-n ms-3 justify-content-between"
-      />
-      <div v-else-if="isLoggedIn" class="d-flex mr-n align-items-center">
+      <div v-if="isLoggedIn" class="d-flex mr-n align-items-center">
         <!-- TODO Itt profil szerkesztés -->
         <span class="mx-2">{{ name }}</span>
-        <base-button v-if="roles" to="/choose" type="warning" outline>
-          <fa-icon icon="exchange-alt" class="fa-1x mr-1" />
-          Váltás
-        </base-button>
         <base-button type="danger" outline @click="logout">
           <fa-icon icon="sign-out-alt" class="fa-1x mr-1" />
           Kijelentkezés
@@ -61,34 +42,12 @@ export default {
       return store.getters.getName;
     });
 
-    // setInterval(() => {
-    //   isLoggedIn.value = store.getters.isLoggedIn;
-    //   name.value = store.getters.getName;
-    //   console.log('NAME', name.value);
-    // }, 1000);
-
     return { isLoggedIn, name };
-  },
-
-  computed: {
-    roles() {
-      return this.$store.getters.isSwitchable && this.$route.name !== 'choose';
-    },
-    isQuiz() {
-      return this.$route.name === 'edit';
-    },
-    isTeacher() {
-      return ['teacher'].includes(this.$route.name);
-    },
-    isFill() {
-      return ['fills'].includes(this.$route.name);
-    },
   },
 
   methods: {
     async logout() {
       this.$store.dispatch('logout');
-      this.$router.go('/');
     },
   },
 };

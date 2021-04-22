@@ -77,7 +77,7 @@
 <script>
 import Google from '../assets/pics/brand/googleLogo.svg';
 import axios from '@/config/axios.js';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { computed, reactive, ref } from 'vue';
 
@@ -86,6 +86,7 @@ export default {
   setup() {
     const store = useStore();
     const route = useRoute();
+    const router = useRouter();
     const mode = computed(() => {
       return route.query.mode === 'reg';
     });
@@ -117,28 +118,31 @@ export default {
     async function submit() {
       try {
         if (!mode.value) {
-          // await store.dispatch('login', {
-          //   email: login.email,
-          //   password: login.password,
-          //   redirect: route.query.redirect,
-          // });
           axios
             .post('/users/signin', { email: login.email, password: login.password })
             .then(res => {
               store.dispatch('changeAuth', { token: res.data.accessToken });
+              router.replace(route.query.redirect ? `/${route.query.redirect}` : '/home');
             })
             .catch(err => {
               hiba.value = err.response.data.message;
             });
         } else {
-          await store.dispatch('signup', {
-            email: reg.email,
-            password: reg.password,
-            name: reg.fullName,
-            phone: reg.phoneNumber,
-            user: reg.userName,
-            redirect: route.query.redirect,
-          });
+          axios
+            .post('/users/signup', {
+              email: reg.email,
+              password: reg.password,
+              name: reg.userName,
+              fullName: reg.fullName,
+              phoneNumber: reg.phoneNumber,
+            })
+            .then(res => {
+              store.dispatch('changeAuth', { token: res.data.accessToken });
+              router.replace(route.query.redirect ? `/${route.query.redirect}` : '/home');
+            })
+            .catch(err => {
+              hiba.value = err.response.data.message;
+            });
         }
       } catch (error) {
         console.log(error.message || 'Failed to login. Try later.');

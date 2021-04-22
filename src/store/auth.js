@@ -1,39 +1,43 @@
 import axios from '@/config/axios.js';
+import jwt from 'jsonwebtoken';
+import router from '@/router.js';
 
 export default {
   state() {
     return {
-      userName: null,
+      user: null,
       token: null,
     };
   },
   getters: {
     isLoggedIn(state) {
-      return !!state.userName;
+      return !!state.user;
     },
     getName(state) {
-      return state.userName;
+      return state.user.name;
     },
   },
   mutations: {
     changeAuth(state, payload) {
-      state.userName = payload.userName;
+      state.user = payload.user;
       state.token = payload.token;
-      console.log('U', state.userName);
-      console.log('T', state.token);
     },
   },
   actions: {
-    logout() {
-      console.log('KILÉPÉS');
+    logout(context) {
+      context.commit('changeAuth', { user: null, token: null });
+      localStorage.clear();
+      axios.defaults.headers.common['Authorization'] = null;
+      router.replace('/');
     },
     changeAuth(context, payload) {
-      context.commit('changeAuth', {
-        userName: payload?.name ? payload.name : null,
-        token: payload?.token ? payload.token : null,
-      });
-      axios.defaults.headers.common['Authorization'] = `Bearer ${payload.token}`;
-      localStorage.setItem('token', payload.token);
+      if (!payload.token) context.dispatch('logout', {});
+      else {
+        const jwtP = jwt.verify(payload.token, 'topSecret69');
+        axios.defaults.headers.common['Authorization'] = `Bearer ${payload.token}`;
+        localStorage.setItem('token', payload.token);
+        context.commit('changeAuth', { user: jwtP, token: payload.token });
+      }
     },
   },
 };

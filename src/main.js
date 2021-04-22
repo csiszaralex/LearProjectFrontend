@@ -15,8 +15,10 @@ import BaseBadge from './components/UI/BaseBadge.vue';
 import BaseDialog from './components/UI/BaseDialog.vue';
 import BaseTable from './components/UI/BaseTable.vue';
 
-const app = createApp(App);
+// if (localStorage.getItem('token'))
+//   store.dispatch('changeAuth', { token: localStorage.getItem('token') });
 
+const app = createApp(App);
 app.use(store);
 app.use(router);
 
@@ -28,5 +30,4 @@ app.component('BaseTable', BaseTable);
 app.component('FaIcon', FontAwesomeIcon);
 app.component('FaLayers', FontAwesomeLayers);
 app.component('FaLayersText', FontAwesomeLayersText);
-
 app.mount('#app');
