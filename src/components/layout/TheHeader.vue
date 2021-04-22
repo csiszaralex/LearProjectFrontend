@@ -1,6 +1,4 @@
 <template>
-  <!-- eslint-disable vue/html-comment-indent  -->
-  <!-- Image and text -->
   <nav class="navbar navbar-light bg-primary">
     <div class="container-fluid">
       <router-link to="/" class="navbar-brand" href="#">
@@ -39,28 +37,6 @@
           <fa-icon icon="sign-out-alt" class="fa-1x mr-1" />
           Kijelentkezés
         </base-button>
-        <!-- HACK Itt rossz a design -->
-        <!-- 
-          <span class="nav-item dropdown">
-          <a
-            id="navbarDropdown"
-            class="nav-link dropdown-toggle text-dark"
-            href="#"
-            role="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            Dropdown
-          </a>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <div class="dropdown-divider" />
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>
-        </span>
-         -->
       </div>
       <div v-else class="d-flex mr-n">
         <base-button to="/auth?mode=reg" type="info">Regisztráció</base-button>
@@ -71,15 +47,25 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 export default {
   name: 'TheHeader',
   setup() {
     const store = useStore();
 
-    const isLoggedIn = ref(store.getters.isLoggedIn);
-    const name = ref(store.getters.getName);
+    const isLoggedIn = computed(() => {
+      return store.getters.isLoggedIn;
+    });
+    const name = computed(() => {
+      return store.getters.getName;
+    });
+
+    // setInterval(() => {
+    //   isLoggedIn.value = store.getters.isLoggedIn;
+    //   name.value = store.getters.getName;
+    //   console.log('NAME', name.value);
+    // }, 1000);
 
     return { isLoggedIn, name };
   },

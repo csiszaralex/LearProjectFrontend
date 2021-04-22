@@ -1,123 +1,39 @@
-import firebase from 'firebase/app';
-require('firebase/auth');
-import router from '@/router';
+import axios from '@/config/axios.js';
 
 export default {
   state() {
     return {
-      user: null,
+      userName: null,
+      token: null,
     };
   },
   getters: {
     isLoggedIn(state) {
-      return !!state.user;
-    },
-    getEmail(state) {
-      return state.user?.email;
+      return !!state.userName;
     },
     getName(state) {
-      return state.user?.displayName;
-    },
-    getId(state) {
-      return state.user.uid;
+      return state.userName;
     },
   },
   mutations: {
     changeAuth(state, payload) {
-      state.user = payload.user;
+      state.userName = payload.userName;
+      state.token = payload.token;
+      console.log('U', state.userName);
+      console.log('T', state.token);
     },
   },
   actions: {
     logout() {
-      firebase
-        .auth()
-        .signOut()
-        .then(() => {
-          return '';
-          // console.log(router);
-          // router.replace('/');
-        });
-    },
-    async login(context, payload) {
-      await firebase
-        .auth() // Bejelentkezés
-        .signInWithEmailAndPassword(payload.email, payload.pass)
-        .then(
-          () => {
-            // alert("Successful login!");
-            const user = firebase.auth().currentUser;
-            if (user) {
-              if (user.emailVerified) {
-                // Átírányítás: ha megerősített akkor a demo oldalra
-                // this.$router.replace('vuexfirebasedemo');
-                console.log('Megerősítve');
-              } else {
-                // Ha nem megerősített a megerősítő e-mail újraküldés oldalára
-                // this.$router.replace('verify');
-                console.log('Megerősítés szükséges');
-              }
-            }
-            return '';
-            // console.log(router);
-            // router.replace('/teacher');
-          },
-          err => {
-            alert('Oops. ' + err.message);
-          },
-        );
-    },
-    async signup(context, payload) {
-      await firebase
-        .auth()
-        .createUserWithEmailAndPassword(payload.email, payload.pass)
-        .then(
-          success => {
-            if (success.user) {
-              success.user.sendEmailVerification();
-              success.user.updateProfile({ displayName: payload.name }).then(() => {
-                alert('Sikeres regisztráció!');
-                router.go('/choose');
-              });
-            }
-          },
-          err => {
-            alert('Oops. ' + err.message);
-          },
-        );
-    },
-    async social(context, payload) {
-      const provider = payload.google
-        ? new firebase.auth.GoogleAuthProvider()
-        : new firebase.auth.FacebookAuthProvider();
-      firebase.auth().languageCode = 'hu';
-      await firebase
-        .auth() // Bejelentkezés
-        // .signInWithPopup(provider)
-        .signInWithRedirect(provider)
-        .then(
-          success => {
-            // alert("Successful login!");
-            const user = success.user;
-            if (user) {
-              if (user.emailVerified) {
-                // Átírányítás: ha megerősített akkor a demo oldalra
-                // this.$router.replace('vuexfirebasedemo');
-                console.log('Jó');
-              } else {
-                // Ha nem megerősített a megerősítő e-mail újraküldés oldalára
-                // this.$router.replace('verify');
-                console.log('Rossz');
-              }
-              // router.replace('/teacher');
-            }
-          },
-          err => {
-            alert('Oops. ' + err.message);
-          },
-        );
+      console.log('KILÉPÉS');
     },
     changeAuth(context, payload) {
-      context.commit('changeAuth', { user: payload?.user ? payload.user : null });
+      context.commit('changeAuth', {
+        userName: payload?.name ? payload.name : null,
+        token: payload?.token ? payload.token : null,
+      });
+      axios.defaults.headers.common['Authorization'] = `Bearer ${payload.token}`;
+      localStorage.setItem('token', payload.token);
     },
   },
 };

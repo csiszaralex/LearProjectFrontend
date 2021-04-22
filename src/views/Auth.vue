@@ -1,89 +1,99 @@
 <template>
-  <div
-    v-if="mode"
-    class="reg d-flex flex-md-row flex-column justify-content-center justify-content-md-around align-items-center flex-grow-1"
-  >
-    <form @submit.prevent="submit">
-      <base-input v-model="reg.fullName" type="text" :pattern="patterns.name" icon="signature">
-        Teljes név
-      </base-input>
-      <base-input v-model="reg.userName" type="text" :pattern="patterns.user" icon="user">
-        Felhasználó név
-      </base-input>
-      <base-input v-model="reg.email" type="email" :pattern="patterns.email" icon="at">
-        E-mail
-      </base-input>
-      <base-input v-model="reg.phoneNumber" type="phone" :pattern="patterns.phone" icon="phone">
-        Telefonszám
-      </base-input>
-      <base-input v-model="reg.password" type="password" :pattern="patterns.password" icon="lock">
-        Jelszó
-      </base-input>
-      <base-input v-model="reg.pass2" type="password" :pattern="patterns.password" icon="lock">
-        Jelszó megismétlése
-      </base-input>
-      <base-button type="info" submit>Tovább</base-button>
-    </form>
-    <!-- <hr class="border-dark bg-dark text-dark p-1" /> -->
-    <div class="separator m-3"></div>
-    <div class="Social">
-      <button
-        class="btn google w-75 text-light d-flex flex-row align-items-center p-0 pe-1"
-        @click="google"
-      >
-        <img :src="Google" alt="Google brand logo" class="bg-light google-logo me-3" />
-        <div class="">Belépés Google-lal</div>
-      </button>
-    </div>
-  </div>
-  <div
-    v-else
-    class="login d-flex flex-md-row flex-column justify-content-center justify-content-md-around align-items-center flex-grow-1"
-  >
-    <div>
+  <div>
+    <base-dialog :show="!!hiba" title="Hibás kitöltés" btn="info" type="danger" @close="bezar">
+      <ul v-if="typeof hiba === 'object'" class="list-unstyled pb-3">
+        <li v-for="h in hiba" :key="h" class="p-1">{{ h }}</li>
+      </ul>
+      <p v-else class="p-1">{{ hiba }}</p>
+    </base-dialog>
+    <div
+      v-if="mode"
+      class="reg d-flex flex-md-row flex-column justify-content-center justify-content-md-around align-items-center flex-grow-1"
+    >
       <form @submit.prevent="submit">
-        <base-input v-model="login.email" type="email" :pattern="patterns.email" icon="at">
+        <base-input v-model="reg.fullName" type="text" :pattern="patterns.name" icon="signature">
+          Teljes név
+        </base-input>
+        <base-input v-model="reg.userName" type="text" :pattern="patterns.user" icon="user">
+          Felhasználó név
+        </base-input>
+        <base-input v-model="reg.email" type="email" :pattern="patterns.email" icon="at">
           E-mail
         </base-input>
-        <base-input
-          v-model="login.password"
-          type="password"
-          :pattern="patterns.password"
-          icon="lock"
-        >
+        <base-input v-model="reg.phoneNumber" type="phone" :pattern="patterns.phone" icon="phone">
+          Telefonszám
+        </base-input>
+        <base-input v-model="reg.password" type="password" :pattern="patterns.password" icon="lock">
           Jelszó
         </base-input>
-        <base-button type="info" submit>Bejelentkezés</base-button>
+        <base-input v-model="reg.pass2" type="password" :pattern="patterns.password" icon="lock">
+          Jelszó megismétlése
+        </base-input>
+        <base-button type="info" submit>Tovább</base-button>
       </form>
+      <!-- <hr class="border-dark bg-dark text-dark p-1" /> -->
+      <div class="separator m-3"></div>
+      <div class="Social">
+        <button
+          class="btn google w-75 text-light d-flex flex-row align-items-center p-0 pe-1"
+          @click="google"
+        >
+          <img :src="Google" alt="Google brand logo" class="bg-light google-logo me-3" />
+          <div class="">Belépés Google-lal</div>
+        </button>
+      </div>
     </div>
-    <div class="separator m-3"></div>
-    <div class="Social">
-      <button
-        class="btn google w-75 text-light d-flex flex-row align-items-center p-0 pe-1"
-        @click="google"
-      >
-        <img :src="Google" alt="Google brand logo" class="bg-light google-logo me-3" />
-        <div class="">Belépés Google-lal</div>
-      </button>
+    <div
+      v-else
+      class="login d-flex flex-md-row flex-column justify-content-center justify-content-md-around align-items-center flex-grow-1"
+    >
+      <div>
+        <form @submit.prevent="submit">
+          <base-input v-model="login.email" :pattern="patterns.email" icon="at">
+            E-mail
+          </base-input>
+          <base-input
+            v-model="login.password"
+            type="password"
+            :pattern="patterns.password"
+            icon="lock"
+          >
+            Jelszó
+          </base-input>
+          <base-button type="info" submit>Bejelentkezés</base-button>
+        </form>
+      </div>
+      <div class="separator m-3"></div>
+      <div class="Social">
+        <button class="btn google w-75 text-light d-flex flex-row align-items-center p-0 pe-1">
+          <img :src="Google" alt="Google brand logo" class="bg-light google-logo me-3" />
+          <div class="bg-danger">MAJD social belépés</div>
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import Google from '../assets/pics/brand/googleLogo.svg';
-import { useRoute, useRouter } from 'vue-router';
+import axios from '@/config/axios.js';
+import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
-import { computed, reactive } from 'vue';
+import { computed, reactive, ref } from 'vue';
 
 export default {
   name: 'Auth',
   setup() {
     const store = useStore();
     const route = useRoute();
-    const router = useRouter();
     const mode = computed(() => {
       return route.query.mode === 'reg';
     });
+
+    const hiba = ref();
+    function bezar() {
+      hiba.value = '';
+    }
 
     const patterns = {
       name: /^([A-Za-z]+[.][ ]?)?[A-ZÁ-ű][a-zÁ-ű]{2,}(?:[-][[A-ZÁ-ű][a-zÁ-ű]*){0,1}(?: [A-ZÁ-ű][a-zÁ-ű]{2,}){1,2}$/,
@@ -92,8 +102,6 @@ export default {
       password: /^(?=.*[a-záéóőűúüö])(?=.*[A-ZÁÉÓŐŰÚÜÖ])(?=.*[0-9])(?=.{8,})/,
       phone: /^[+]?[03][6]((([23578][0]|[1])[0-9]{7,7})|[^23578][0-9]{7,7})$/,
     };
-
-    //*Auth
     const reg = reactive({
       fullName: '',
       userName: '',
@@ -103,39 +111,41 @@ export default {
       pass2: '',
     });
     const login = reactive({
-      email: '',
-      password: '',
+      email: 'alex@alex.hu',
+      password: 'Alex1234',
     });
     async function submit() {
       try {
         if (!mode.value) {
-          await store.dispatch('login', { email: login.email, pass: login.password }).then(() => {
-            const redirect = '/' + (route.query.redirect || 'choose');
-            router.go(redirect);
-          });
+          // await store.dispatch('login', {
+          //   email: login.email,
+          //   password: login.password,
+          //   redirect: route.query.redirect,
+          // });
+          axios
+            .post('/users/signin', { email: login.email, password: login.password })
+            .then(res => {
+              store.dispatch('changeAuth', { token: res.data.accessToken });
+            })
+            .catch(err => {
+              hiba.value = err.response.data.message;
+            });
         } else {
           await store.dispatch('signup', {
             email: reg.email,
-            pass: reg.password,
+            password: reg.password,
             name: reg.fullName,
             phone: reg.phoneNumber,
             user: reg.userName,
+            redirect: route.query.redirect,
           });
         }
       } catch (error) {
         console.log(error.message || 'Failed to login. Try later.');
       }
     }
-    async function google() {
-      await store.dispatch('social', { google: true });
-      const redirect = '/' + (route.query.redirect || 'choose');
-      router.go(redirect);
-    }
-    function fb() {
-      store.dispatch('social', {});
-    }
 
-    return { mode, submit, reg, login, google, fb, Google, patterns };
+    return { mode, submit, reg, login, Google, patterns, hiba, bezar };
   },
 };
 </script>
