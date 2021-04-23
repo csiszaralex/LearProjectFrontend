@@ -1,9 +1,8 @@
 <template>
   <nav class="navbar navbar-expand-md navbar-light bg-primary">
-    <router-link to="/" class="navbar-brand ml-2">
+    <router-link to="/" class="navbar-brand ml-2 logoholder">
       <img
         :src="require('@/assets/pics/logo/logo.png')"
-        alt=""
         width="30"
         height="30"
         class="d-inline-block align-top"
@@ -102,7 +101,7 @@ export default {
     }
     margin-right: -1rem;
   }
-  a:hover,
+  a:hover:not(.logoholder),
   ul.menu a.router-link-active {
     background-color: darken($primary, 15);
   }
