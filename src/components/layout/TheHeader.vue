@@ -15,17 +15,31 @@
     </button>
 
     <div id="navb" class="collapse navbar-collapse">
+      <ul v-if="isLoggedIn" class="navbar-nav ml-2 mr-auto menu">
+        <li class="nav-item">
+          <router-link to="/home" class="btn">
+            <fa-icon icon="home" class="fa-1x mr-1" />
+            Főoldal
+          </router-link>
+        </li>
+      </ul>
       <ul class="navbar-nav ml-auto">
-        <li v-if="isLoggedIn" class="nav-item btn dropdown">
-          <a id="fiok" class="btn dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+        <li v-if="isLoggedIn" class="nav-item btn dropdown p-0">
+          <a id="fiok" class="btn dropdown-toggle" role="button" data-toggle="dropdown">
+            <fa-icon icon="user-circle" class="fa-1x mr-1" />
             {{ name }}
           </a>
           <div class="dropdown-menu dropdown-menu-right pb-0">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
+            <router-link to="/profile" class="dropdown-item">
+              <fa-icon icon="user" class="fa-1x mr-1" />
+              Saját fiók
+            </router-link>
+            <router-link v-if="role > 2" to="/admin" class="dropdown-item">
+              <fa-icon icon="toolbox" class="fa-1x mr-1" />
+              Adminisztráció
+            </router-link>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
-            <base-button type="danger" class="w-100" outline @click="logout">
+            <base-button type="danger" class="w-100 border-0" outline @click="logout">
               <fa-icon icon="sign-out-alt" class="fa-1x mr-1" />
               Kijelentkezés
             </base-button>
@@ -58,8 +72,11 @@ export default {
     const name = computed(() => {
       return store.getters.getName;
     });
+    const role = computed(() => {
+      return store.getters.getRole;
+    });
 
-    return { isLoggedIn, name };
+    return { isLoggedIn, name, role };
   },
 
   methods: {
@@ -75,9 +92,6 @@ export default {
   padding-top: 0;
   padding-bottom: 0;
   margin-right: 0;
-  // overflow: hidden visible;
-  // overflow-x: hidden;
-  // overflow-y: visible;
   .dropdown-menu {
     overflow-y: visible;
   }
@@ -87,6 +101,10 @@ export default {
       float: right;
     }
     margin-right: -1rem;
+  }
+  a:hover,
+  ul.menu a.router-link-active {
+    background-color: darken($primary, 15);
   }
 }
 </style>

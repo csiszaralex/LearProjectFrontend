@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Landing from '@/views/Landing.vue';
 import Auth from '@/views/Auth.vue';
 import Home from '@/views/Home.vue';
+import Profile from '@/views/Profile.vue';
+import Admin from '@/views/Admin.vue';
 import NotFound from '@/views/NotFound';
 import store from '@/store';
 
@@ -9,6 +11,8 @@ const routes = [
   { path: '/', name: 'landing', component: Landing, meta: { title: 'Főoldal', role: 0 } },
   { path: '/auth', name: 'auth', component: Auth, meta: { title: 'Bejelentlkezés', role: 0 } },
   { path: '/home', name: 'home', component: Home, meta: { title: 'Főoldal', role: 1 } },
+  { path: '/profile', name: 'profile', component: Profile, meta: { title: 'Saját fiók', role: 1 } },
+  { path: '/admin', name: 'admin', component: Admin, meta: { title: 'Adminisztráció', role: 2 } },
   { path: '/:notFound(.*)', name: 'notfound', component: NotFound },
 ];
 
