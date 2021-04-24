@@ -28,7 +28,6 @@ export default {
   },
   actions: {
     logout(context) {
-      console.log('KILÉP');
       context.commit('changeAuth', { user: null, token: null });
       localStorage.clear();
       axios.defaults.headers.common['Authorization'] = null;

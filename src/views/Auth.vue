@@ -90,7 +90,7 @@ export default {
     function bezar() {
       hiba.value = '';
     }
-
+    //TODO Regisztrációhoz google reCaptcha
     const reg = reactive({
       fullName: '',
       userName: '',

@@ -148,8 +148,7 @@ $okay: $success;
     left: 50%;
   }
   &.focus,
-  &.fail.no-check,
-  &.okay.no-check {
+  &.no-check {
     &:after,
     &:before {
       width: 50%;

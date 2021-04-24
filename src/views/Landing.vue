@@ -36,18 +36,18 @@ export default {
       error.value = null;
 
       axios
-        .get('/users')
-        .then(() => {
+        .get('/homepage')
+        .then(res => {
           isLoading.value = false;
           const datas = [];
-          // for (const i in res.data) {
-          //   datas.push({
-          //     id: res.data[i].id,
-          //     cim: res.data[i].cim,
-          //     alcim: res.data[i].alcim,
-          //     picture: res.data[i].picture,
-          //   });
-          // }
+          for (const i in res.data) {
+            datas.push({
+              id: res.data[i].id,
+              cim: res.data[i].cim,
+              alcim: res.data[i].alcim,
+              picture: res.data[i].picture,
+            });
+          }
           results.value = datas;
         })
         .catch(err => {

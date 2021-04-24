@@ -9,7 +9,6 @@
     >
       <strong v-if="showErr !== 'Sikeres mentés!'" class="mr-2">Hiba!</strong>
       {{ error }}
-      <button type="button" class="btn-close" data-dismiss="alert" @click="error = ''"></button>
     </div>
     <form
       v-if="myProfile"
@@ -62,7 +61,9 @@
         icon="phone"
         pattern="phone"
         class="w-75 my-3"
-        :no-check="myProfile.phoneNumber === editProfile.phoneNumber"
+        :no-check="
+          myProfile.phoneNumber === editProfile.phoneNumber && editProfile.phoneNumber !== ''
+        "
       >
         Telefonszám
       </base-input>
@@ -104,6 +105,7 @@ export default {
     function getFromServer() {
       axios.get('/users/whoami').then(res => {
         myProfile.value = { ...res.data, password: '' };
+        if (!myProfile.value.phoneNumber) myProfile.value.phoneNumber = '';
         editProfile.value = JSON.parse(JSON.stringify(myProfile.value));
       });
     }
