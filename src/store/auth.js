@@ -28,18 +28,36 @@ export default {
   },
   actions: {
     logout(context) {
+      console.log('KILÉP');
       context.commit('changeAuth', { user: null, token: null });
       localStorage.clear();
       axios.defaults.headers.common['Authorization'] = null;
       router.replace('/');
     },
-    changeAuth(context, payload) {
-      if (!payload.token) context.dispatch('logout', {});
+    renew(context) {
+      axios
+        .put('/users/renew')
+        .then(({ data }) => {
+          context.dispatch('changeAuth', { token: data.accessToken });
+        })
+        .catch(() => {
+          context.dispatch('logout');
+        });
+    },
+    changeAuth(context, { token }) {
+      if (!token) context.dispatch('logout', {});
       else {
-        const jwtP = jwt.verify(payload.token, 'topSecret69');
-        axios.defaults.headers.common['Authorization'] = `Bearer ${payload.token}`;
-        localStorage.setItem('token', payload.token);
-        context.commit('changeAuth', { user: jwtP, token: payload.token });
+        try {
+          const jwtP = jwt.verify(token, 'topSecret69');
+          setTimeout(() => {
+            context.dispatch('renew');
+          }, new Date(jwtP.exp * 1000) - new Date() - 10000);
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          localStorage.setItem('token', token);
+          context.commit('changeAuth', { user: jwtP, token: token });
+        } catch (err) {
+          context.dispatch('logout');
+        }
       }
     },
   },

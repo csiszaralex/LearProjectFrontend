@@ -1,5 +1,5 @@
 <template>
-  <div class="input-div">
+  <div class="input-div" :class="{ 'no-check': noCheck }">
     <fa-layers full-width class="fa-2x">
       <fa-icon :icon="icon" />
     </fa-layers>
@@ -36,25 +36,47 @@
 import { ref, watch, computed } from 'vue';
 export default {
   name: 'BaseInput',
-  props: ['modelValue', 'type', 'pattern', 'icon', 'autofocus'],
+  props: {
+    modelValue: { type: String, required: true },
+    type: { type: String, default: 'text' },
+    pattern: { type: [String, RegExp], default: '' },
+    icon: { type: [Array, String], default: 'at' },
+    autofocus: { type: Boolean, required: false },
+    noCheck: { type: Boolean, required: false },
+  },
   emits: ['update:modelValue', 'check'],
   setup(props, context) {
     const data = ref(props.modelValue ? props.modelValue : '');
     watch(data, () => {
       context.emit('update:modelValue', data.value);
     });
-    watch(props, () => {
-      data.value = props.modelValue;
-    });
 
     const eye = ref(true);
     function changeEye() {
       eye.value = !eye.value;
     }
-
     const inputType = computed(() => {
-      return props.type ? (eye.value ? props.type : 'text') : 'text';
+      return eye.value ? props.type : 'text';
     });
+
+    function patternC(p) {
+      switch (p) {
+        case '':
+          return '';
+        case 'fullName':
+          return /^([A-Za-z]+[.][ ]?)?[A-ZÁ-ű][a-zÁ-ű]{2,}(?:[-][[A-ZÁ-ű][a-zÁ-ű]*){0,1}(?: [A-ZÁ-ű][a-zÁ-ű]{2,}){1,2}$/;
+        case 'phone':
+          return /^[+]?[03][6]((([23578][0]|[1])[0-9]{7,7})|[^23578][0-9]{7,7})$/;
+        case 'name':
+          return /^[^@&#\s]{4,30}$/;
+        case 'email':
+          return /^([A-Za-z0-9]+([._%+!-]?[A-Za-z0-9])?)+[@](([A-Za-z0-9]+([._-]?[A-Za-z0-9])?)+[.])+([A-z]{2,})$/;
+        case 'password':
+          return /^(?=.*[a-záéóőűúüö])(?=.*[A-ZÁÉÓŐŰÚÜÖ])(?=.*[0-9])(?=.{8,})/;
+        default:
+          return p;
+      }
+    }
 
     function blur(e) {
       let parent = e.target.parentNode.parentNode;
@@ -70,16 +92,22 @@ export default {
       if (data.value === '') {
         szulo.classList.add('focus');
         context.emit('check', { val: false });
-      } else if (data.value.match(props.pattern)) {
-        szulo.classList.add('okay');
+      } else if (data.value.match(patternC(props.pattern))) {
+        szulo.classList.add(props.noCheck ? 'focus' : 'okay');
         context.emit('check', { val: true });
       } else {
-        szulo.classList.add('fail');
+        szulo.classList.add(props.noCheck ? 'focus' : 'fail');
         context.emit('check', { val: false });
       }
     }
 
-    return { data, inputType, blur, focus, check, eye, changeEye };
+    return { data, inputType, blur, focus, check, eye, changeEye, patternC };
+  },
+  watch: {
+    modelValue(val) {
+      this.data = val;
+      if (val !== '') this.check({ target: this.$refs['input'] });
+    },
   },
   mounted() {
     if (this.$refs['input'].value !== '') this.check({ target: this.$refs['input'] });
@@ -119,7 +147,9 @@ $okay: $success;
   &:before {
     left: 50%;
   }
-  &.focus {
+  &.focus,
+  &.fail.no-check,
+  &.okay.no-check {
     &:after,
     &:before {
       width: 50%;
@@ -132,7 +162,7 @@ $okay: $success;
       font-size: 15px;
     }
   }
-  &.fail {
+  &.fail:not(.no-check) {
     margin-bottom: 25px;
     &:after,
     &:before {
@@ -150,7 +180,7 @@ $okay: $success;
       display: block;
     }
   }
-  &.okay {
+  &.okay:not(.no-check) {
     &:after,
     &:before {
       width: 50%;

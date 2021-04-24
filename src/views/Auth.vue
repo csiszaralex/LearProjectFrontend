@@ -11,22 +11,22 @@
       class="reg d-flex flex-md-row flex-column justify-content-center justify-content-md-around align-items-center flex-grow-1"
     >
       <form @submit.prevent="submit">
-        <base-input v-model="reg.fullName" type="text" :pattern="patterns.name" icon="signature">
+        <base-input v-model="reg.fullName" type="text" pattern="fullName" icon="signature">
           Teljes név
         </base-input>
-        <base-input v-model="reg.userName" type="text" :pattern="patterns.user" icon="user">
+        <base-input v-model="reg.userName" type="text" pattern="name" icon="user">
           Felhasználó név
         </base-input>
-        <base-input v-model="reg.email" type="email" :pattern="patterns.email" icon="at">
+        <base-input v-model="reg.email" type="email" pattern="email" icon="at">
           E-mail
         </base-input>
-        <base-input v-model="reg.phoneNumber" type="phone" :pattern="patterns.phone" icon="phone">
+        <base-input v-model="reg.phoneNumber" type="phone" pattern="phone" icon="phone">
           Telefonszám
         </base-input>
-        <base-input v-model="reg.password" type="password" :pattern="patterns.password" icon="lock">
+        <base-input v-model="reg.password" type="password" pattern="password" icon="lock">
           Jelszó
         </base-input>
-        <base-input v-model="reg.pass2" type="password" :pattern="patterns.password" icon="lock">
+        <base-input v-model="reg.pass2" type="password" pattern="password" icon="lock">
           Jelszó megismétlése
         </base-input>
         <base-button type="info" submit>Tovább</base-button>
@@ -49,15 +49,10 @@
     >
       <div>
         <form @submit.prevent="submit">
-          <base-input v-model="login.email" :pattern="patterns.email" icon="at">
+          <base-input v-model="login.email" pattern="email" icon="at">
             E-mail
           </base-input>
-          <base-input
-            v-model="login.password"
-            type="password"
-            :pattern="patterns.password"
-            icon="lock"
-          >
+          <base-input v-model="login.password" type="password" pattern="password" icon="lock">
             Jelszó
           </base-input>
           <base-button type="info" submit>Bejelentkezés</base-button>
@@ -96,13 +91,6 @@ export default {
       hiba.value = '';
     }
 
-    const patterns = {
-      name: /^([A-Za-z]+[.][ ]?)?[A-ZÁ-ű][a-zÁ-ű]{2,}(?:[-][[A-ZÁ-ű][a-zÁ-ű]*){0,1}(?: [A-ZÁ-ű][a-zÁ-ű]{2,}){1,2}$/,
-      user: /^[^@&#\s]{4,30}$/,
-      email: /^([A-Za-z0-9]+([._%+!-]?[A-Za-z0-9])?)+[@](([A-Za-z0-9]+([._-]?[A-Za-z0-9])?)+[.])+([A-z]{2,})$/,
-      password: /^(?=.*[a-záéóőűúüö])(?=.*[A-ZÁÉÓŐŰÚÜÖ])(?=.*[0-9])(?=.{8,})/,
-      phone: /^[+]?[03][6]((([23578][0]|[1])[0-9]{7,7})|[^23578][0-9]{7,7})$/,
-    };
     const reg = reactive({
       fullName: '',
       userName: '',
@@ -145,7 +133,7 @@ export default {
       }
     }
 
-    return { mode, submit, reg, login, Google, patterns, hiba, bezar };
+    return { mode, submit, reg, login, Google, hiba, bezar };
   },
 };
 </script>

@@ -10,6 +10,7 @@ import {
   faToolbox,
   faLock,
   faHome,
+  faUserTag,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -24,6 +25,7 @@ library.add(
   faToolbox,
   faSignOutAlt,
   faHome,
+  faUserTag,
 );
 
 // $ npm i --save @fortawesome/free-brands-svg-icons //. fab

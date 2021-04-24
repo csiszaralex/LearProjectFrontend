@@ -1,8 +1,7 @@
 <template>
-  <!-- TODO SUBMIT -->
   <!-- BUG A success-nek light legyen a színe, ne dark -->
   <button :type="btnSend" class="btn" :class="[btnType]" :disabled="disabled">
-    <router-link v-if="!btnSend" :to="btnLink" class="text-reset text-decoration-none">
+    <router-link v-if="!btnRouter" :to="btnLink" class="text-reset text-decoration-none">
       <slot />
     </router-link>
     <slot v-else />
@@ -14,7 +13,7 @@ import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 export default {
   name: 'BaseButton',
-  props: ['to', 'type', 'outline', 'disabled'],
+  props: ['to', 'type', 'outline', 'disabled', 'submit'],
   setup(props) {
     const route = useRoute();
     const btnLink = computed(() => {
@@ -33,10 +32,14 @@ export default {
     });
     const btnSend = computed(() => {
       //props.submit === '' ||
+      // return !props.to || props.to === '' ? 'button' : '';
+      return props.submit === '' ? 'submit' : 'button';
+    });
+    const btnRouter = computed(() => {
       return !props.to || props.to === '';
     });
 
-    return { btnLink, btnType, btnText, btnSend };
+    return { btnLink, btnType, btnText, btnSend, btnRouter };
   },
 };
 </script>
