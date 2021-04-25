@@ -34,6 +34,7 @@ export default {
       router.replace('/');
     },
     renew(context) {
+      //TODO Csak akkor újít, ha aktív a lap, ha lejár amíg nincs megnyitva kijelentkeztet
       axios
         .put('/users/renew')
         .then(({ data }) => {

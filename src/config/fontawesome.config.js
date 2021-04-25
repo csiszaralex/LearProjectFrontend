@@ -11,6 +11,9 @@ import {
   faLock,
   faHome,
   faUserTag,
+  faUsers,
+  faAngleDoubleLeft,
+  faAngleDoubleRight,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -26,6 +29,9 @@ library.add(
   faSignOutAlt,
   faHome,
   faUserTag,
+  faUsers,
+  faAngleDoubleLeft,
+  faAngleDoubleRight,
 );
 
 // $ npm i --save @fortawesome/free-brands-svg-icons //. fab
