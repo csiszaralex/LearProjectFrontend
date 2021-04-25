@@ -15,6 +15,7 @@ import BaseSelect from './components/UI/BaseSelect.vue';
 import BaseBadge from './components/UI/BaseBadge.vue';
 import BaseDialog from './components/UI/BaseDialog.vue';
 import BaseTable from './components/UI/BaseTable.vue';
+import BaseLoader from './components/UI/BaseLoader.vue';
 
 if (localStorage.getItem('token')){
   store.dispatch('changeAuth', { token: localStorage.getItem('token') });
@@ -31,6 +32,7 @@ app.component('BaseSelect', BaseSelect);
 app.component('BaseBadge', BaseBadge);
 app.component('BaseDialog', BaseDialog);
 app.component('BaseTable', BaseTable);
+app.component('BaseLoader', BaseLoader);
 app.component('FaIcon', FontAwesomeIcon);
 app.component('FaLayers', FontAwesomeLayers);
 app.component('FaLayersText', FontAwesomeLayersText);

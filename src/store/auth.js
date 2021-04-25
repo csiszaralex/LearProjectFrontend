@@ -36,7 +36,7 @@ export default {
     renew(context) {
       //TODO Csak akkor újít, ha aktív a lap, ha lejár amíg nincs megnyitva kijelentkeztet
       axios
-        .put('/users/renew')
+        .get('/users/renew')
         .then(({ data }) => {
           context.dispatch('changeAuth', { token: data.accessToken });
         })

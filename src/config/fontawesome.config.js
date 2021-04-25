@@ -1,5 +1,5 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
+import { faEye, faEyeSlash, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import {
   faUser,
   faSignOutAlt,
@@ -14,6 +14,7 @@ import {
   faUsers,
   faAngleDoubleLeft,
   faAngleDoubleRight,
+  faEdit,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -32,6 +33,8 @@ library.add(
   faUsers,
   faAngleDoubleLeft,
   faAngleDoubleRight,
+  faEdit,
+  faTrashAlt,
 );
 
 // $ npm i --save @fortawesome/free-brands-svg-icons //. fab

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p v-if="isLoading" class="text-center">Töltés...</p>
+    <base-loader v-if="isLoading">Töltés...</base-loader>
     <p v-else-if="error">{{ error }}</p>
     <p v-else-if="!results || results.length === 0" class="text-center display-3">
       Nincs adat
@@ -38,7 +38,6 @@ export default {
       axios
         .get('/homepage')
         .then(res => {
-          isLoading.value = false;
           const datas = [];
           for (const i in res.data) {
             datas.push({
@@ -49,6 +48,7 @@ export default {
             });
           }
           results.value = datas;
+          // isLoading.value = false;
         })
         .catch(err => {
           error.value = err;
