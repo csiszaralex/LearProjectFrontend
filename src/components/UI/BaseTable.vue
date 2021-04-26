@@ -41,6 +41,7 @@
       </tbody>
     </table>
   </div>
+  <div v-else>NINCS ADAT</div>
 </template>
 
 <script>

@@ -2,7 +2,12 @@
   <teleport to="body">
     <div v-if="show" class="backdrop" @click="tryClose"></div>
     <transition name="dialog">
-      <dialog v-if="show" open class="m-0 mt-n5 p-0 overflow-hidden border-0">
+      <dialog
+        v-if="show"
+        open
+        class="m-0 mt-n5 p-0 overflow-hidden border-0"
+        :class="upper ? 'upper' : ''"
+      >
         <header class="w-100 p-3" :class="'bg-' + type">
           <slot name="header">
             <h2 class="m-0">{{ title }}</h2>
@@ -12,7 +17,7 @@
           <slot></slot>
         </section>
         <menu
-          v-if="!fixed"
+          v-if="!fixed && !footless"
           class="m-0 p-3 pt-0 d-flex"
           :class="[
             btn2Text === '' ? 'justify-content-end' : 'justify-content-between',
@@ -45,6 +50,8 @@ export default {
     btn2Text: { type: String, default: '' },
     btn2Type: { type: String, default: 'success' },
     reverse: { type: Boolean, required: false },
+    upper: { type: Boolean, required: false },
+    footless: { type: Boolean, required: false },
   },
   emits: ['close', 'send'],
   methods: {
@@ -83,6 +90,9 @@ dialog {
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   background-color: white;
+}
+.upper {
+  top: 10vh;
 }
 
 .dialog-enter-from,

@@ -1,10 +1,27 @@
 <template>
   <div>
-    <base-dialog :show="!!hiba" title="Hibás kitöltés" btn="info" type="danger" @close="bezar">
+    <base-dialog
+      :show="!!hiba"
+      :title="hiba === 'Tiltás' ? 'Jelenleg ki vagy tiltva az oldalról' : 'Hibás kitöltés'"
+      btn="info"
+      type="danger"
+      @close="bezar"
+    >
       <ul v-if="typeof hiba === 'object'" class="list-unstyled pb-3">
         <li v-for="h in hiba" :key="h" class="p-1">{{ h }}</li>
       </ul>
-      <p v-else class="p-1">{{ hiba }}</p>
+      <p v-else class="p-1">
+        <span v-if="hiba === 'Tiltás'">
+          A tiltást valószínűleg egy nem megengedett kihágásodnak köszönheted.
+          <br />
+          <br />
+          <small>
+            Ha úgy érzed a tiltásod nem szabályos kérjük vedd fel a kapcsolatot az
+            ügyfélszolgálattal!
+          </small>
+        </span>
+        <span v-else>{{ hiba }}</span>
+      </p>
     </base-dialog>
     <div
       v-if="mode"
@@ -91,6 +108,7 @@ export default {
       hiba.value = '';
     }
     //TODO Regisztrációhoz google reCaptcha
+    //TODO Google belépés
     const reg = reactive({
       fullName: '',
       userName: '',

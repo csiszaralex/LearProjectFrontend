@@ -1,6 +1,18 @@
 <template>
-  <div class="flex-grow-1 mt-2 px-3">
-    <h3 class="mb-4">Személyes adatok</h3>
+  <div class="flex-grow-1 mt-2 px-3 pb-3">
+    <base-dialog
+      :show="!!sureDelete"
+      title="Biztosan törölni akarod?"
+      type="danger"
+      close-text="Mégse"
+      btn="outline-warning"
+      btn2-text="Törlés"
+      btn2-type="outline-danger"
+      reverse
+      @close="sureDelete = 0"
+      @send="del"
+    ></base-dialog>
+    <h3 v-if="!imported" class="mb-4">Személyes adatok</h3>
     <div
       v-if="showErr"
       class="alert alert-dismissible fade position-absolute z-100"
@@ -68,10 +80,10 @@
         Telefonszám
       </base-input>
       <base-select
-        v-if="myProfile.role > 1"
+        v-if="role > 1"
         v-model="editProfile.role"
         icon="user-tag"
-        :nums="myProfile.role"
+        :nums="id ? role - 1 : myProfile.role"
         :values="roleEnum"
         :def="myProfile.role"
         class="w-75 my-3"
@@ -82,6 +94,14 @@
         <base-button type="warning" class="w-25 align-self-center" @click="megse">
           Mégse
         </base-button>
+        <base-button
+          v-if="!imported"
+          type="outline-danger"
+          class="w-25 align-self-center"
+          @click="sureDelete = 1"
+        >
+          Fiók törlése
+        </base-button>
         <base-button type="primary" submit class="w-25 align-self-center">Mentés</base-button>
       </div>
     </form>
@@ -90,20 +110,24 @@
 
 <script>
 import axios from '@/config/axios.js';
+import rolesEnum from '@/config/role.enum.js';
 import { ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
 export default {
   name: 'Profile',
-  setup() {
+  props: { id: { type: String, default: '' }, imported: { type: Boolean, required: false } },
+  emits: ['close'],
+  setup(props, { emit }) {
     const store = useStore();
+    const sureDelete = ref(0);
     const error = ref('');
     const showErr = ref('');
-    const roleEnum = ['Vendég', 'Felhasználó', 'Szerkesztő', 'Moderátor', 'Admin', 'Superuser'];
+    const roleEnum = rolesEnum;
     const myProfile = ref();
     const editProfile = ref();
     function getFromServer() {
-      axios.get('/users/whoami').then(res => {
+      axios.get(`/users/whoami/${props.id}`).then(res => {
         myProfile.value = { ...res.data, password: '' };
         if (!myProfile.value.phoneNumber) myProfile.value.phoneNumber = '';
         editProfile.value = JSON.parse(JSON.stringify(myProfile.value));
@@ -111,13 +135,14 @@ export default {
     }
     function save() {
       axios
-        .patch('/users', editProfile.value)
+        .patch(`/users/${props.id}`, editProfile.value)
         .then(({ data }) => {
-          store.dispatch('changeAuth', { token: data.accessToken });
+          if (!props.id) store.dispatch('changeAuth', { token: data.accessToken });
           myProfile.value = JSON.parse(JSON.stringify(editProfile.value));
           error.value = 'Sikeres mentés!';
           setTimeout(() => {
             error.value = '';
+            if (props.imported) emit('close');
           }, 3000);
         })
         .catch(err => {
@@ -129,7 +154,14 @@ export default {
     }
     function megse() {
       editProfile.value = JSON.parse(JSON.stringify(myProfile.value));
+      if (props.imported) emit('close');
     }
+    function del() {
+      axios.delete('/users').then(() => {
+        store.dispatch('logout');
+      });
+    }
+    //TODO Mentés után a select nem kékül vissza
 
     watch(error, val => {
       const timer = val ? 0 : 250;
@@ -139,7 +171,23 @@ export default {
     });
 
     getFromServer();
-    return { myProfile, getFromServer, save, roleEnum, editProfile, error, megse, showErr };
+    return {
+      myProfile,
+      getFromServer,
+      save,
+      editProfile,
+      roleEnum,
+      error,
+      megse,
+      showErr,
+      sureDelete,
+      del,
+    };
+  },
+  computed: {
+    role() {
+      return this.$store.getters['getRole'];
+    },
   },
 };
 </script>

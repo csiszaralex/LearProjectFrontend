@@ -11,7 +11,14 @@ const routes = [
   { path: '/', name: 'landing', component: Landing, meta: { title: 'Főoldal', role: 0 } },
   { path: '/auth', name: 'auth', component: Auth, meta: { title: 'Bejelentlkezés', role: 0 } },
   { path: '/home', name: 'home', component: Home, meta: { title: 'Főoldal', role: 1 } },
-  { path: '/profile', name: 'profile', component: Profile, meta: { title: 'Saját fiók', role: 1 } },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: Profile,
+    meta: { title: 'Saját fiók', role: 1 },
+    props: true,
+    children: [{ path: ':id', name: 'profileId', component: Profile }],
+  },
   { path: '/admin', name: 'admin', component: Admin, meta: { title: 'Adminisztráció', role: 2 } },
   { path: '/:notFound(.*)', name: 'notfound', component: NotFound },
 ];
