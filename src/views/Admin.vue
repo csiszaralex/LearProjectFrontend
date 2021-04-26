@@ -2,10 +2,10 @@
   <div class="flex-grow-1 d-flex">
     <div class="admin flex-grow-1">
       <div class="navB bg-light p-2">
-        <nav-bar @go="go"></nav-bar>
+        <nav-bar></nav-bar>
       </div>
       <div>
-        <admin-user v-if="content === 'users' && role >= 4"></admin-user>
+        <admin-user v-if="content === 'users' && role >= 3"></admin-user>
       </div>
     </div>
   </div>
@@ -17,17 +17,10 @@ import AdminUser from '../components/admin/AdminUser.vue';
 export default {
   name: 'Admin',
   components: { NavBar, AdminUser },
+  props: { content: { type: String, default: '' } },
   computed: {
-    content() {
-      return this.$route.query['content'];
-    },
     role() {
       return this.$store.getters['getRole'];
-    },
-  },
-  methods: {
-    go(where) {
-      this.$router.replace('/admin?content=' + where);
     },
   },
 };

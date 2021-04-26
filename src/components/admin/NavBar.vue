@@ -11,11 +11,11 @@
         <span v-if="opened" class="align-self-center">Becsuk</span>
       </div>
     </li>
-    <li v-if="role >= 4" class="nav-item my-0 text-center" @click="go('users')">
-      <div class="btn mx-1 px-1 bigtext d-flex">
+    <li v-if="role >= 3" class="nav-item my-0 text-center">
+      <router-link to="/admin/users" class="btn mx-1 px-1 bigtext d-flex">
         <fa-icon icon="users" class="fa-2x mr-1 align-self-center" />
         <span v-if="opened" class="align-self-center">Felhasználók</span>
-      </div>
+      </router-link>
     </li>
   </ul>
 </template>
@@ -23,7 +23,6 @@
 <script>
 export default {
   name: 'NavBar',
-  emits: ['go'],
   data() {
     return { opened: false };
   },
@@ -36,9 +35,6 @@ export default {
     change() {
       this.opened = !this.opened;
     },
-    go(p) {
-      this.$emit('go', p);
-    },
   },
 };
 </script>
@@ -47,11 +43,19 @@ export default {
 .bigtext {
   font-size: 1.2rem;
 }
+li > a:hover,
 li > div:hover {
   background-color: lighten($dark, 15);
   span,
   svg {
     color: $light;
+  }
+}
+.router-link-active {
+  background-color: lighten($dark, 48);
+  span,
+  svg {
+    color: lighten($dark, 5);
   }
 }
 .justify-self-center {

@@ -33,7 +33,7 @@
               <fa-icon icon="user" class="fa-1x mr-1" />
               Saját fiók
             </router-link>
-            <router-link v-if="role > 2" to="/admin" class="dropdown-item">
+            <router-link v-if="role > 1" to="/admin" class="dropdown-item">
               <fa-icon icon="toolbox" class="fa-1x mr-1" />
               Adminisztráció
             </router-link>

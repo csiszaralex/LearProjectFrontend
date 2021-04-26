@@ -19,7 +19,14 @@ const routes = [
     props: true,
     children: [{ path: ':id', name: 'profileId', component: Profile }],
   },
-  { path: '/admin', name: 'admin', component: Admin, meta: { title: 'Adminisztráció', role: 2 } },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: Admin,
+    meta: { title: 'Adminisztráció', role: 2 },
+    props: true,
+    children: [{ path: ':content', name: 'AdminId', component: Admin }],
+  },
   { path: '/:notFound(.*)', name: 'notfound', component: NotFound },
 ];
 

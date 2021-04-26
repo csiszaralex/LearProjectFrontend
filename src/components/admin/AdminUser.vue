@@ -1,6 +1,6 @@
 <template>
   <div class="h3 my-3">Felhasználói fiókok</div>
-  <base-dialog :show="!!selectedId" upper footless>
+  <base-dialog :show="!!selectedId" title="Felhasználó szerkesztése" upper footless>
     <profile :id="selectedId" imported @close="close"></profile>
   </base-dialog>
   <base-loader v-if="loading">Loading...</base-loader>
