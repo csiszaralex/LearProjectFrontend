@@ -48,7 +48,7 @@ export default {
             });
           }
           results.value = datas;
-          // isLoading.value = false;
+          isLoading.value = false;
         })
         .catch(err => {
           error.value = err;
