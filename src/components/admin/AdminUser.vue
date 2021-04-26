@@ -37,7 +37,7 @@ export default {
             id: user.id,
             Név: user.name,
             'E-mail cím': user.email,
-            Jogosultság: user.role < 6 ? roleEnum[user.role] : user.role,
+            Jogosultság: `${user.role} ${roleEnum[user.role] ? '- ' + roleEnum[user.role] : ''}`,
             'Létrehozás dátuma': moment(user.createdAt)
               .locale('hu')
               .format('ll'),

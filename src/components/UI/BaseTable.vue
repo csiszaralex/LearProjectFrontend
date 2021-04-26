@@ -1,5 +1,5 @@
 <template>
-  <div v-if="data" class="table-responsive">
+  <div v-if="sortedData" class="table-responsive">
     <base-dialog
       :show="!!delId"
       title="Biztosan törölni akarod?"
@@ -15,25 +15,32 @@
     <table class="table table-hover">
       <thead>
         <tr>
-          <th scope="col">#</th>
-          <th v-for="head in headers" :key="head" scope="col">{{ head }}</th>
-          <th v-if="editable">SZERK</th>
-          <th v-if="deletable">TÖR</th>
+          <th v-for="head in headers" :key="head" scope="col" @click="setSort(head)">
+            <span class="mr-2">{{ head }}</span>
+            <fa-icon v-if="sort === head && type === 1" icon="caret-up"></fa-icon>
+            <fa-icon v-else-if="sort === head" icon="caret-down"></fa-icon>
+          </th>
+          <th v-if="editable || deletable"></th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(row, i) in data" :key="i">
-          <td scope="row">{{ i + 1 }}</td>
+        <tr v-for="(row, i) in sortedData" :key="i">
           <td v-for="head in headers" :key="head + i">
             {{ row[head] ? row[head] : row[head] === 0 ? 0 : '-' }}
           </td>
-          <td v-if="editable" class="text-center">
-            <base-button type="outline-warning btn-sm" @click="edit(row[editable])">
+          <td v-if="editable || deletable" class="text-center">
+            <base-button
+              v-if="editable"
+              type="outline-warning btn-sm mx-1"
+              @click="edit(row[editable])"
+            >
               <fa-icon icon="edit"></fa-icon>
             </base-button>
-          </td>
-          <td v-if="deletable" class="text-center">
-            <base-button type="outline-danger btn-sm" @click="delId = row[editable]">
+            <base-button
+              v-if="deletable"
+              type="outline-danger btn-sm"
+              @click="delId = row[editable]"
+            >
               <fa-icon :icon="['far', 'trash-alt']"></fa-icon>
             </base-button>
           </td>
@@ -46,7 +53,7 @@
 
 <script>
 // TODO szűrő, és akár rendezés nyilakkal
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 export default {
   name: 'BaseTable',
   props: {
@@ -58,7 +65,7 @@ export default {
   emits: ['edit', 'delete'],
   setup(props, context) {
     const delId = ref(0);
-    const headers = ref([]);
+    const headers = ref(['#']);
     function getHeaders() {
       for (const x of props.data) {
         for (const y in x) {
@@ -76,7 +83,33 @@ export default {
       delId.value = 0;
     }
 
-    return { headers, getHeaders, edit, del, delId };
+    const sortedData = computed(() => {
+      let ret = [];
+      props.data.forEach((item, index) => {
+        ret.push({ ...item, '#': index + 1 });
+      });
+      if (sort.value) {
+        ret = ret.sort((a, b) => {
+          return a[sort.value] === b[sort.value]
+            ? 0
+            : a[sort.value] > b[sort.value]
+            ? type.value
+            : -1 * type.value;
+        });
+      }
+      return ret;
+    });
+
+    const sort = ref();
+    const type = ref(1);
+    function setSort(head) {
+      if (sort.value !== head) {
+        sort.value = head;
+        type.value = 1;
+      } else type.value = type.value === 1 ? -1 : 1;
+    }
+
+    return { headers, getHeaders, edit, del, delId, sort, setSort, type, sortedData };
   },
   watch: {
     data() {
@@ -87,10 +120,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-td {
-  vertical-align: middle;
-}
-th {
-  text-align: center;
+table {
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  td {
+    vertical-align: middle;
+  }
+  th {
+    vertical-align: middle;
+    text-align: center;
+    span,
+    svg {
+      cursor: pointer;
+    }
+  }
 }
 </style>
