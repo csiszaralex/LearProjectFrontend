@@ -5,4 +5,5 @@
 ## Teszt projekt frontendje
 
 Nyelv: Vue
+
 Szükséges hozzá a projekt backendje, valamint egy MySQL szerver
