@@ -20,6 +20,10 @@
             <fa-icon icon="home" class="fa-1x mr-1" />
             Főoldal
           </router-link>
+          <router-link to="/file" class="btn">
+            <fa-icon icon="file" class="fa-1x mr-1" />
+            Fájl
+          </router-link>
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
