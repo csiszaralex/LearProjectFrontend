@@ -20,34 +20,32 @@
             <fa-icon v-if="sort === head && type === 1" icon="caret-up"></fa-icon>
             <fa-icon v-else-if="sort === head" icon="caret-down"></fa-icon>
           </th>
-          <th v-if="editable || deletable || downloadable"></th>
+          <th v-if="downloadable"></th>
+          <th v-if="editable"></th>
+          <th v-if="deletable"></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(row, i) in sortedData" :key="i">
-          <td v-for="head in headers" :key="head + i">
+          <td
+            v-for="head in headers"
+            :key="head + i"
+            :class="typeof row[head] === 'number' ? 'text-center' : ''"
+          >
             {{ row[head] ? row[head] : row[head] === 0 ? 0 : '-' }}
           </td>
-          <td v-if="editable || deletable || downloadable" class="text-center">
-            <base-button
-              v-if="downloadable"
-              type="outline-success btn-sm mx-1"
-              @click="download(row[downloadable])"
-            >
+          <td v-if="downloadable" class="text-center p-1 py-2">
+            <base-button type="outline-success btn-sm" @click="download(row[downloadable])">
               <fa-icon icon="download"></fa-icon>
             </base-button>
-            <base-button
-              v-if="editable"
-              type="outline-warning btn-sm mx-1"
-              @click="edit(row[editable])"
-            >
+          </td>
+          <td v-if="editable" class="text-center p-1 py-2">
+            <base-button type="outline-warning btn-sm" @click="edit(row[editable])">
               <fa-icon icon="edit"></fa-icon>
             </base-button>
-            <base-button
-              v-if="deletable"
-              type="outline-danger btn-sm"
-              @click="delId = row[deletable]"
-            >
+          </td>
+          <td v-if="deletable" class="text-center p-1 py-2">
+            <base-button type="outline-danger btn-sm" @click="delId = row[deletable]">
               <fa-icon :icon="['far', 'trash-alt']"></fa-icon>
             </base-button>
           </td>
@@ -59,7 +57,9 @@
 </template>
 
 <script>
-// TODO szűrő, és akár rendezés nyilakkal
+//TODO szűrő
+//TODO átnevezés
+//TODO előnézet
 import { computed, ref } from 'vue';
 export default {
   name: 'BaseTable',
@@ -85,17 +85,17 @@ export default {
     getHeaders();
 
     function edit(id) {
-      context.emit('edit', id);
       if (props.debug) console.log('Szerkesztés: ', id);
+      context.emit('edit', id);
     }
     function del() {
-      context.emit('delete', delId.value);
       if (props.debug) console.log('Törlés: ', delId.value);
+      context.emit('delete', delId.value);
       delId.value = 0;
     }
     function download(id) {
-      context.emit('download', id);
       if (props.debug) console.log('Letöltés: ', id);
+      context.emit('download', id);
     }
 
     const sortedData = computed(() => {
@@ -124,7 +124,18 @@ export default {
       } else type.value = type.value === 1 ? -1 : 1;
     }
 
-    return { headers, getHeaders, edit, del, delId, sort, setSort, type, sortedData, download };
+    return {
+      headers,
+      getHeaders,
+      edit,
+      del,
+      delId,
+      sort,
+      setSort,
+      type,
+      sortedData,
+      download,
+    };
   },
   watch: {
     data() {

@@ -61,6 +61,10 @@ export default {
         .get(`/files/${id}`, { responseType: 'arraybuffer' })
         .then(res => {
           forceDownload(res.data, item.Név);
+          files.value = files.value.map(file => {
+            if (file.id === id) file['Letöltések száma']++;
+            return file;
+          });
         })
         .catch(err => {
           console.log(err.response.data);
@@ -78,7 +82,7 @@ export default {
     function getAll() {
       axios.get('/files').then(({ data }) => {
         files.value = data.map(d => {
-          return { Név: d.name, id: d.id };
+          return { id: d.id, Név: d.name, 'Letöltések száma': d.downloads };
         });
       });
     }
