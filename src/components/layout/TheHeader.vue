@@ -24,6 +24,10 @@
             <fa-icon icon="file" class="fa-1x mr-1" />
             Fájl
           </router-link>
+          <router-link to="/chat" class="btn">
+            <fa-icon icon="comment" class="fa-1x mr-1" />
+            Chat
+          </router-link>
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">

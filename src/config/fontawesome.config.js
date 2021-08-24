@@ -20,6 +20,7 @@ import {
   faDownload,
   faFile,
   faPen,
+  faComment,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -45,6 +46,7 @@ library.add(
   faDownload,
   faFile,
   faPen,
+  faComment,
 );
 
 // $ npm i --save @fortawesome/free-brands-svg-icons //. fab
