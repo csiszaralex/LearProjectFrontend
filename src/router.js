@@ -4,6 +4,7 @@ import Auth from '@/views/Auth.vue';
 import Home from '@/views/Home.vue';
 import Profile from '@/views/Profile.vue';
 import Admin from '@/views/Admin.vue';
+import File from '@/views/File';
 import NotFound from '@/views/NotFound';
 import store from '@/store';
 
@@ -27,6 +28,7 @@ const routes = [
     props: true,
     children: [{ path: ':content', name: 'AdminId', component: Admin }],
   },
+  { path: '/file', name: 'file', component: File, meta: { title: 'Fájlok', role: 1 } },
   { path: '/:notFound(.*)', name: 'notfound', component: NotFound },
 ];
 

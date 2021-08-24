@@ -17,6 +17,9 @@ import {
   faEdit,
   faCaretUp,
   faCaretDown,
+  faDownload,
+  faFile,
+  faPen,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -39,6 +42,9 @@ library.add(
   faTrashAlt,
   faCaretUp,
   faCaretDown,
+  faDownload,
+  faFile,
+  faPen,
 );
 
 // $ npm i --save @fortawesome/free-brands-svg-icons //. fab

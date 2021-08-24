@@ -8,12 +8,12 @@
             {{ alcim }}
           </p>
         </div>
-        <img
-          :src="photos"
-          alt="LandingPhoto"
-          class="col-lg-6 mt-2"
+        <div
+          class="col-lg-6 mt-2 text-center"
           :class="{ 'order-first': floating(orientation) && jo }"
-        />
+        >
+          <img :src="photos" alt="LandingPhoto" />
+        </div>
       </div>
     </div>
   </li>
@@ -42,14 +42,7 @@ export default {
   },
   computed: {
     photos() {
-      switch (this.photo) {
-        case 'stat':
-          return 'https://via.placeholder.com/350';
-        case 'qr':
-          return 'https://via.placeholder.com/350';
-        default:
-          return this.photo;
-      }
+      return this.photo;
     },
   },
 };
@@ -67,5 +60,8 @@ li {
 }
 p.card-text {
   font-size: 1.2rem;
+}
+img {
+  max-width: 30vw;
 }
 </style>
