@@ -12,7 +12,7 @@
     "LICENSE": true,
     //.Átláthatósághoz
     "**/vue.config.js": true,
-    "**/public": true,🤔
+    "**/public": true,
     "**/.vscode": true,
     "**/help**": true,
     "netlify.toml": true,
