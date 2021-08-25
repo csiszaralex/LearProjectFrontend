@@ -112,6 +112,7 @@ export default {
   a:hover:not(.logoholder),
   ul.menu a.router-link-active {
     background-color: darken($primary, 15);
+    font-weight: bold;
   }
 }
 </style>
