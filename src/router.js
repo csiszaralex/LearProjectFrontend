@@ -30,7 +30,14 @@ const routes = [
     children: [{ path: ':content', name: 'AdminId', component: Admin }],
   },
   { path: '/file', name: 'file', component: File, meta: { title: 'Fájlok', role: 1 } },
-  { path: '/chat', name: 'chat', component: Chat, meta: { title: 'Chat', role: 1 }, props: true },
+  {
+    path: '/chat',
+    name: 'chat',
+    component: Chat,
+    meta: { title: 'Chat', role: 1 },
+    props: true,
+    children: [{ path: ':userId', name: 'UserId', component: Chat }],
+  },
   { path: '/:notFound(.*)', name: 'notfound', component: NotFound },
 ];
 
