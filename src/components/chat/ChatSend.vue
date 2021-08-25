@@ -2,7 +2,7 @@
   <form class="d-flex justify-content-around mx-3" @submit.prevent="send">
     <label for="message" class="form-label my-auto mr-1">Üzenet: </label>
     <input id="message" v-model="message" type="text" class="form-control" />
-    <base-button>Küld</base-button>
+    <base-button submit>Küld</base-button>
   </form>
 </template>
 
